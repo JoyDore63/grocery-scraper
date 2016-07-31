@@ -112,6 +112,7 @@ public class ScraperService {
 		
 		// Get products list
 		Elements source_products = doc.getElementsByClass("product");
+		logger.debug("Found this many products " + source_products.size());
 		// Each product: get details
 		for (Element source_prod : source_products) {
 			// Unit price is in products list on first page, ie within current element
