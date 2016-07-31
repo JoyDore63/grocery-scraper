@@ -7,31 +7,31 @@ import java.util.List;
  * @author Joy
  *
  */
-public class ProductList {
+public class Results {
 	
 	private static DecimalFormat decimalFormat2 = new DecimalFormat(".##");
 	
-	private List<Product> products;
+	private List<Result> results;
 
 	/**
-	 * @param products
+	 * @param results
 	 */
-	public ProductList(List<Product> products) {
-		this.products = products;
+	public Results(List<Result> results) {
+		this.results = results;
 	}
 	
 	/**
-	 * @return the products
+	 * @return the results
 	 */
-	public List<Product> getProducts() {
-		return products;
+	public List<Result> getResults() {
+		return results;
 	}
 
 	/**
-	 * @param products the products to set
+	 * @param results the results to set
 	 */
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setResults(List<Result> results) {
+		this.results = results;
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class ProductList {
 	 */
 	public String getTotal() {
 		double total = 0;
-		for (Product prod : this.products){
+		for (Result prod : this.results){
 			total += prod.getUnit_price();
 		}
 		return (decimalFormat2.format(total));
@@ -48,8 +48,8 @@ public class ProductList {
 	
 	public String toString(){
 		StringBuilder str = new StringBuilder(300);
-		str.append("Products:\n");
-		for (Product prod : this.products) {
+		str.append("Results:\n");
+		for (Result prod : this.results) {
 			str.append(prod.toString() + "\n");
 		}
 		str.append("Total=" + this.getTotal());

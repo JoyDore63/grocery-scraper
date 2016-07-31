@@ -104,8 +104,8 @@ public class ScraperService {
 	 * @throws IOException
 	 * @throws UnexpectedFormatException
 	 */
-	public List<Product> getProducts(String url) throws IOException, UnexpectedFormatException {
-		List<Product> products = new ArrayList<Product>();
+	public List<Result> getResults(String url) throws IOException, UnexpectedFormatException {
+		List<Result> results = new ArrayList<Result>();
 		
 		// Get main URL as doc
 		Document doc = Jsoup.connect(url).get();
@@ -124,12 +124,12 @@ public class ScraperService {
 			Document detail_doc = Jsoup.connect(detail_link).get();
 			String title = getTitle(detail_doc);
 			String description = getDescription(detail_doc);
-			// Build up product list
-			Product product = new Product(title, file_size, unit_price, description);
-			products.add(product);
+			// Build up results list
+			Result result = new Result(title, file_size, unit_price, description);
+			results.add(result);
 		}
 
-		return products;
+		return results;
 	}
 
 }

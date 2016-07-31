@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
  * @author Joy
  *
  */
-public class Product {
+public class Result {
 
 	private String title;
 	private long file_size;
@@ -20,7 +20,7 @@ public class Product {
 	 * @param unit_price
 	 * @param description
 	 */
-	public Product (String title, long file_size, double unit_price, String description) {
+	public Result (String title, long file_size, double unit_price, String description) {
 		this.title = title;
 		this.file_size = file_size;
 		this.size = FileUtils.byteCountToDisplaySize(file_size).toLowerCase().replace(" ", "");
@@ -87,7 +87,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [title=" + title + ", file_size=" + file_size
+		return "Result: [title=" + title + ", file_size=" + file_size
 				+ ", unit_price=" + unit_price + ", description=" + description
 				+ "]";
 	}

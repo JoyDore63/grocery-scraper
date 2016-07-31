@@ -18,13 +18,13 @@ public class ScraperClient {
 	public static void main(String[] args) throws IOException, MalformedURLException, UnexpectedFormatException {
 	
 		ScraperService scraperService = new ScraperService();
-		List<Product> products = scraperService.getProducts(URL);
+		List<Result> result_list = scraperService.getResults(URL);
 
-		ProductList product_list = new ProductList(products);
-		logger.info("Product List:" + product_list.toString());
+		Results results = new Results(result_list);
+		logger.info("Results:" + results.toString());
 		
 		ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String jsonString = writer.writeValueAsString(product_list);
+		String jsonString = writer.writeValueAsString(results);
 		System.out.print(jsonString);
 	}
 }
