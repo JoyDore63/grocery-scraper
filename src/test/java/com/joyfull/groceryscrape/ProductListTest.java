@@ -1,4 +1,4 @@
-package com.joyfull.groceryscrape.test;
+package com.joyfull.groceryscrape;
 
 import static org.junit.Assert.*;
 
