@@ -3,7 +3,6 @@ package com.joyfull.groceryscrape;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -88,4 +87,15 @@ public class ScraperServiceTest {
 		Assert.assertEquals("Sainsbury's Avocados, Ripe & Ready x4 | Sainsbury's", title);
 	}
 	
+	@Test
+	public void testGetDescription() {
+		String html = "<meta name=\"description\" content=\"Buy Sainsbury's Avocados, Ripe & Ready x4 online from Sainsbury's, the same " +
+				"great quality, freshness and choice you'd find in store. Choose from 1 hour delivery slots and collect Nectar points.\"/>" + 
+				"<meta name=\"keyword\" content=\"\"/>" +
+				"<meta property=\"fb:app_id\" content=\"258691960829999\" />"; 
+		logger.info("html=" + html);
+		Document document = Jsoup.parse(html);
+		String description = ScraperService.getDescription(document);
+		Assert.assertEquals("Buy Sainsbury's Avocados, Ripe & Ready x4 online from Sainsbury's, the same great quality, freshness and choice you'd find in store. Choose from 1 hour delivery slots and collect Nectar points.", description);
+	}
 }

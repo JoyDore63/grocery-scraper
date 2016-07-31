@@ -30,9 +30,9 @@ public class ProductList {
 	
 	public String toString(){
 		StringBuilder str = new StringBuilder(300);
-		str.append("Products:");
+		str.append("Products:\n");
 		for (Product prod : this.products) {
-			str.append(prod.toString() + " ");
+			str.append(prod.toString() + "\n");
 		}
 		str.append("Total=" + this.getTotal());
 		return str.toString();

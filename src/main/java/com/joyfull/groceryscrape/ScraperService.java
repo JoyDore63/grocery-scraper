@@ -21,7 +21,7 @@ public class ScraperService {
 
 	protected static final String URL = new String("http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html");
 	private static final Logger logger = LoggerFactory.getLogger(ScraperService.class);
-	
+
 	/**
 	 * 
 	 * @param link
@@ -40,7 +40,7 @@ public class ScraperService {
 	        conn.disconnect();
 	    }
 	}
-	
+
 	/**
 	 * 
 	 * @param l
@@ -49,7 +49,7 @@ public class ScraperService {
 	private static String formatSize(long l) {
 		return FileUtils.byteCountToDisplaySize(l).toLowerCase();
 	}
-	
+
 	protected static double getPrice(Element source_prod) throws UnexpectedFormatException {
 		Elements pricePerUnitElements = source_prod.getElementsByClass("pricePerUnit");
 		if (pricePerUnitElements.size() != 1) {
@@ -58,7 +58,7 @@ public class ScraperService {
 		String price_str = pricePerUnitElements.first().ownText();
 		return(parsePrice(price_str));
 	}
-	
+
 	protected static double parsePrice(String price_str) {
 		double price = 0.0;
 		Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+))");
@@ -72,7 +72,7 @@ public class ScraperService {
 		}
 		return(price);
 	}
-	
+
 	protected static String getLinkToDetailsPage(Element source_prod) throws UnexpectedFormatException {
 		Elements references = source_prod.getElementsByTag("a");
 		if (references.size() < 1) {
@@ -82,7 +82,7 @@ public class ScraperService {
 		
 		return detail_link;
 	}
-	
+
 	protected static String getTitle(Document detail_doc) throws IOException, UnexpectedFormatException {
 		
 		Elements titleElements = detail_doc.getElementsByTag("title");
@@ -92,7 +92,21 @@ public class ScraperService {
 
 		return(titleElements.first().ownText());
 	}
-	
+
+	protected static String getDescription(Document detail_doc) {
+		String description = "";
+
+		Elements metaElements = detail_doc.getElementsByTag("meta");
+		for (Element meta: metaElements) {
+			String name = meta.attr("name");
+			if (name != null && name.equals("description")){
+				description = meta.attr("content");
+			}
+		}
+
+		return description;
+	}
+
 	public List<Product> getProducts(String url) throws IOException, UnexpectedFormatException {
 		List<Product> products = new ArrayList<Product>();
 		
@@ -113,22 +127,22 @@ public class ScraperService {
 			Document detail_doc = Jsoup.connect(detail_link).get();
 			String title = getTitle(detail_doc);
 			// TODO get description
-			Product product = new Product(title, file_size, unit_price, "dummy description");
+			String description = getDescription(detail_doc);
+			Product product = new Product(title, file_size, unit_price, description);
 			products.add(product);
 		}
-		
-		ProductList product_list = new ProductList(products);
-		logger.info("Product List:" + product_list.toString());
-		
+
 		return products;
 	}
 
-	
+
 	public static void main(String[] args) throws IOException, MalformedURLException, UnexpectedFormatException {
 		
 		ScraperService scraperService = new ScraperService();
-		scraperService.getProducts(URL);
+		List<Product> products = scraperService.getProducts(URL);
+
+		ProductList product_list = new ProductList(products);
+		logger.info("Product List:" + product_list.toString());
 	}
-		
 
 }
