@@ -1,5 +1,6 @@
 package com.joyfull.groceryscrape;
 
+import java.text.DecimalFormat;
 import java.util.List; 
 
 /**
@@ -7,6 +8,9 @@ import java.util.List;
  *
  */
 public class ProductList {
+	
+	private static DecimalFormat decimalFormat2 = new DecimalFormat(".##");
+	
 	private List<Product> products;
 
 	/**
@@ -17,15 +21,29 @@ public class ProductList {
 	}
 	
 	/**
+	 * @return the products
+	 */
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	/**
+	 * @param products the products to set
+	 */
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	/**
 	 * 
 	 * @return total of all unit prices
 	 */
-	public double getTotal() {
+	public String getTotal() {
 		double total = 0;
 		for (Product prod : this.products){
 			total += prod.getUnit_price();
 		}
-		return total;
+		return (decimalFormat2.format(total));
 	}
 	
 	public String toString(){

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,9 +16,9 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class ScraperService {
 
-	protected static final String URL = new String("http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html");
 	private static final Logger logger = LoggerFactory.getLogger(ScraperService.class);
 
 	/**
@@ -39,15 +38,6 @@ public class ScraperService {
 	    finally {
 	        conn.disconnect();
 	    }
-	}
-
-	/**
-	 * 
-	 * @param l
-	 * @return Long value formatted to string with kb units 
-	 */
-	private static String formatSize(long l) {
-		return FileUtils.byteCountToDisplaySize(l).toLowerCase();
 	}
 
 	protected static double getPrice(Element source_prod) throws UnexpectedFormatException {
@@ -107,11 +97,18 @@ public class ScraperService {
 		return description;
 	}
 
+	/**
+	 * Get the product data from the given URL, as a list of Product
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 * @throws UnexpectedFormatException
+	 */
 	public List<Product> getProducts(String url) throws IOException, UnexpectedFormatException {
 		List<Product> products = new ArrayList<Product>();
 		
 		// Get main URL as doc
-		Document doc = Jsoup.connect(URL).get();
+		Document doc = Jsoup.connect(url).get();
 		
 		// Get products list
 		Elements source_products = doc.getElementsByClass("product");
@@ -123,26 +120,16 @@ public class ScraperService {
 			String detail_link = getLinkToDetailsPage(source_prod);
 			// Get size of linked file
 			long file_size = getFileSize(detail_link);
-			// Connect to link to get title from details page
+			// Connect to link to get title and description from details page
 			Document detail_doc = Jsoup.connect(detail_link).get();
 			String title = getTitle(detail_doc);
-			// TODO get description
 			String description = getDescription(detail_doc);
+			// Build up product list
 			Product product = new Product(title, file_size, unit_price, description);
 			products.add(product);
 		}
 
 		return products;
-	}
-
-
-	public static void main(String[] args) throws IOException, MalformedURLException, UnexpectedFormatException {
-		
-		ScraperService scraperService = new ScraperService();
-		List<Product> products = scraperService.getProducts(URL);
-
-		ProductList product_list = new ProductList(products);
-		logger.info("Product List:" + product_list.toString());
 	}
 
 }

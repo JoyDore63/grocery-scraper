@@ -1,5 +1,7 @@
 package com.joyfull.groceryscrape;
 
+import org.apache.commons.io.FileUtils;
+
 /**
  * @author Joy
  *
@@ -8,6 +10,7 @@ public class Product {
 
 	private String title;
 	private long file_size;
+	private String size;
 	private double unit_price;
 	private String description;
 	
@@ -20,6 +23,7 @@ public class Product {
 	public Product (String title, long file_size, double unit_price, String description) {
 		this.title = title;
 		this.file_size = file_size;
+		this.size = FileUtils.byteCountToDisplaySize(file_size).toLowerCase().replace(" ", "");
 		this.unit_price = unit_price;
 		this.description = description;
 	}
@@ -41,8 +45,8 @@ public class Product {
 	/**
 	 * @return the file_size
 	 */
-	public long getFile_size() {
-		return file_size;
+	public String getSize() {
+		return size;
 	}
 
 	/**
@@ -50,6 +54,7 @@ public class Product {
 	 */
 	public void setFile_size(long file_size) {
 		this.file_size = file_size;
+		this.size = FileUtils.byteCountToDisplaySize(file_size).toLowerCase();
 	}
 
 	/**

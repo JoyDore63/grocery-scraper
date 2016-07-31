@@ -14,10 +14,11 @@ import org.jsoup.select.Elements;
 public class ScraperServiceTest {
 
 	private static Logger logger = LoggerFactory.getLogger(ScraperServiceTest.class);
+	private static final String URL = new String("http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html");
 	
 	@Test
 	public void testGetFileSize() throws IOException, MalformedURLException {
-		long file_size = ScraperService.getFileSize(ScraperService.URL);
+		long file_size = ScraperService.getFileSize(URL);
 		logger.debug("file size=" + file_size);
 		Assert.assertEquals(84542, file_size);
 	}
