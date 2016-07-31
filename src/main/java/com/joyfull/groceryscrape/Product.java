@@ -80,9 +80,6 @@ public class Product {
 		this.description = description;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "Product [title=" + title + ", file_size=" + file_size

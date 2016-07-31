@@ -50,14 +50,50 @@ public class ScraperService {
 		return FileUtils.byteCountToDisplaySize(l).toLowerCase();
 	}
 	
-	protected static double getPrice(String price_str) {
+	protected static double getPrice(Element source_prod) throws UnexpectedFormatException {
+		Elements pricePerUnitElements = source_prod.getElementsByClass("pricePerUnit");
+		if (pricePerUnitElements.size() != 1) {
+			throw new UnexpectedFormatException("Failed to find pricePerUnit");
+		}
+		String price_str = pricePerUnitElements.first().ownText();
+		return(parsePrice(price_str));
+	}
+	
+	protected static double parsePrice(String price_str) {
+		double price = 0.0;
 		Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+))");
 		Matcher matcher = pattern.matcher(price_str);
 		matcher.find();
-		return(Double.parseDouble(matcher.group(1)));
+		try {
+			price = Double.parseDouble(matcher.group(1));
+		}
+		catch (Exception exception) {
+			logger.error("Invalid price string:" + price_str);
+		}
+		return(price);
 	}
 	
-	public List<Product> getProducts(String url) throws IOException, MalformedURLException {
+	protected static String getLinkToDetailsPage(Element source_prod) throws UnexpectedFormatException {
+		Elements references = source_prod.getElementsByTag("a");
+		if (references.size() < 1) {
+			throw new UnexpectedFormatException("Link to details page not found");
+		}
+		String detail_link = references.first().attr("abs:href");
+		
+		return detail_link;
+	}
+	
+	protected static String getTitle(Document detail_doc) throws IOException, UnexpectedFormatException {
+		
+		Elements titleElements = detail_doc.getElementsByTag("title");
+		if (titleElements.size() < 1) {
+			throw new UnexpectedFormatException("Failed to find title for product");
+		}
+
+		return(titleElements.first().ownText());
+	}
+	
+	public List<Product> getProducts(String url) throws IOException, UnexpectedFormatException {
 		List<Product> products = new ArrayList<Product>();
 		
 		// Get main URL as doc
@@ -68,16 +104,15 @@ public class ScraperService {
 		// Each product: get details
 		for (Element source_prod : source_products) {
 			// Unit price is in products list on first page, ie within current element
-			String price_str = source_prod.getElementsByClass("pricePerUnit").first().ownText();
-			double unit_price = getPrice(price_str);
+			double unit_price = getPrice(source_prod);
 			// Get link to details page
-			Elements references = source_prod.getElementsByTag("a");		
-			String detail_link = references.first().attr("abs:href");
+			String detail_link = getLinkToDetailsPage(source_prod);
 			// Get size of linked file
 			long file_size = getFileSize(detail_link);
 			// Connect to link to get title from details page
 			Document detail_doc = Jsoup.connect(detail_link).get();
-			String title = detail_doc.getElementsByTag("title").first().ownText();
+			String title = getTitle(detail_doc);
+			// TODO get description
 			Product product = new Product(title, file_size, unit_price, "dummy description");
 			products.add(product);
 		}
@@ -89,7 +124,7 @@ public class ScraperService {
 	}
 
 	
-	public static void main(String[] args) throws IOException, MalformedURLException {
+	public static void main(String[] args) throws IOException, MalformedURLException, UnexpectedFormatException {
 		
 		ScraperService scraperService = new ScraperService();
 		scraperService.getProducts(URL);
