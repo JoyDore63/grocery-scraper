@@ -26,7 +26,7 @@ public class ScraperService {
 	 * @param link
 	 * @return
 	 */
-	protected static long getFileSize(String link) throws IOException, MalformedURLException {
+	protected long getFileSize(String link) throws IOException, MalformedURLException {
 		URL url = new URL(link);
 	    HttpURLConnection conn = null;
 	    try {
@@ -40,7 +40,7 @@ public class ScraperService {
 	    }
 	}
 
-	protected static double getPrice(Element source_prod) throws UnexpectedFormatException {
+	protected double getPrice(Element source_prod) throws UnexpectedFormatException {
 		Elements pricePerUnitElements = source_prod.getElementsByClass("pricePerUnit");
 		if (pricePerUnitElements.size() != 1) {
 			throw new UnexpectedFormatException("Failed to find pricePerUnit");
@@ -49,7 +49,7 @@ public class ScraperService {
 		return(parsePrice(price_str));
 	}
 
-	protected static double parsePrice(String price_str) {
+	protected double parsePrice(String price_str) {
 		double price = 0.0;
 		Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+))");
 		Matcher matcher = pattern.matcher(price_str);
@@ -63,7 +63,7 @@ public class ScraperService {
 		return(price);
 	}
 
-	protected static String getLinkToDetailsPage(Element source_prod) throws UnexpectedFormatException {
+	protected String getLinkToDetailsPage(Element source_prod) throws UnexpectedFormatException {
 		Elements references = source_prod.getElementsByTag("a");
 		if (references.size() < 1) {
 			throw new UnexpectedFormatException("Link to details page not found");
@@ -73,7 +73,7 @@ public class ScraperService {
 		return detail_link;
 	}
 
-	protected static String getTitle(Document detail_doc) throws IOException, UnexpectedFormatException {
+	protected String getTitle(Document detail_doc) throws IOException, UnexpectedFormatException {
 		
 		Elements titleElements = detail_doc.getElementsByTag("title");
 		if (titleElements.size() < 1) {
@@ -83,7 +83,7 @@ public class ScraperService {
 		return(titleElements.first().ownText());
 	}
 
-	protected static String getDescription(Document detail_doc) {
+	protected String getDescription(Document detail_doc) {
 		String description = "";
 
 		Elements metaElements = detail_doc.getElementsByTag("meta");

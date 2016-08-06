@@ -1,4 +1,4 @@
-package com.joyfull.groceryscrape;
+package com.joyfull.scraperclient;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,8 @@ import junit.framework.Assert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.joyfull.groceryscrape.Result;
+import com.joyfull.groceryscrape.Results;
 
 import org.junit.Test;
 import org.slf4j.Logger;
