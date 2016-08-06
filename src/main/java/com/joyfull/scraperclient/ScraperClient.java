@@ -1,4 +1,4 @@
-package com.joyfull.groceryscrape;
+package com.joyfull.scraperclient;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,6 +10,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.joyfull.groceryscrape.Result;
+import com.joyfull.groceryscrape.Results;
+import com.joyfull.groceryscrape.ScraperService;
+import com.joyfull.groceryscrape.UnexpectedFormatException;
 
 public class ScraperClient {
 
