@@ -17,12 +17,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * Scrapes a grocery site, looking for product data in an expected format
+ * @author Joy
+ *
+ */
 public class ScraperService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ScraperService.class);
 
 	/**
-	 * 
+	 * Get the size of the html from the link
 	 * @param link
 	 * @return
 	 */
@@ -40,6 +45,12 @@ public class ScraperService {
 	    }
 	}
 
+	/**
+	 * Get the price from the product element
+	 * @param source_prod
+	 * @return price of the product
+	 * @throws UnexpectedFormatException
+	 */
 	protected double getPrice(Element source_prod) throws UnexpectedFormatException {
 		Elements pricePerUnitElements = source_prod.getElementsByClass("pricePerUnit");
 		if (pricePerUnitElements.size() != 1) {
@@ -49,6 +60,11 @@ public class ScraperService {
 		return(parsePrice(price_str));
 	}
 
+	/**
+	 * Get the price as a double from the string like "&pound3.2"
+	 * @param price_str
+	 * @return
+	 */
 	protected double parsePrice(String price_str) {
 		double price = 0.0;
 		Pattern pattern = Pattern.compile("(\\d+(?:\\.\\d+))");
@@ -63,6 +79,12 @@ public class ScraperService {
 		return(price);
 	}
 
+	/**
+	 * Get a link to details from the product element
+	 * @param source_prod
+	 * @return
+	 * @throws UnexpectedFormatException
+	 */
 	protected String getLinkToDetailsPage(Element source_prod) throws UnexpectedFormatException {
 		Elements references = source_prod.getElementsByTag("a");
 		if (references.size() < 1) {
@@ -73,6 +95,13 @@ public class ScraperService {
 		return detail_link;
 	}
 
+	/**
+	 * Get the product title from details
+	 * @param detail_doc
+	 * @return
+	 * @throws IOException
+	 * @throws UnexpectedFormatException
+	 */
 	protected String getTitle(Document detail_doc) throws IOException, UnexpectedFormatException {
 		
 		Elements titleElements = detail_doc.getElementsByTag("title");
@@ -83,6 +112,11 @@ public class ScraperService {
 		return(titleElements.first().ownText());
 	}
 
+	/**
+	 * Get the product description from the details
+	 * @param detail_doc
+	 * @return
+	 */
 	protected String getDescription(Document detail_doc) {
 		String description = "";
 
@@ -100,7 +134,7 @@ public class ScraperService {
 	/**
 	 * Get the product data from the given URL, as a list of Product
 	 * @param url
-	 * @return
+	 * @return List of products as Result objects
 	 * @throws IOException
 	 * @throws UnexpectedFormatException
 	 */

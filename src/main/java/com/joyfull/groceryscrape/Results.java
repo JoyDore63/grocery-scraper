@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.List; 
 
 /**
+ * Allows the product data to be converted to JSON
  * @author Joy
  *
  */
