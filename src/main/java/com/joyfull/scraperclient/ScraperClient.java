@@ -15,6 +15,11 @@ import com.joyfull.groceryscrape.Results;
 import com.joyfull.groceryscrape.ScraperService;
 import com.joyfull.groceryscrape.UnexpectedFormatException;
 
+/**
+ * Uses the ScraperService to scrape a site and output JSON
+ * @author Joy
+ *
+ */
 public class ScraperClient {
 
 	private static final String URL = new String("http://hiring-tests.s3-website-eu-west-1.amazonaws.com/2015_Developer_Scrape/5_products.html");

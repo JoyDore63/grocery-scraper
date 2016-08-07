@@ -3,6 +3,7 @@ package com.joyfull.groceryscrape;
 import org.apache.commons.io.FileUtils;
 
 /**
+ * Allows the product data to be converted to JSON
  * @author Joy
  *
  */

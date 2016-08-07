@@ -1,6 +1,7 @@
 package com.joyfull.groceryscrape;
 
 /**
+ * Exception used when the html is not formatted as expected
  * @author Joy
  *
  */
